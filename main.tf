@@ -551,7 +551,7 @@ resource "aws_instance" "target" {
       if [ -f "$LOCK_FILE" ]; then
         local lock_age=$(( $(date +%s) - $(stat -c %Y "$LOCK_FILE") ))
         if [ "$lock_age" -lt "$COOLDOWN" ]; then
-          log "Alert cooldown active (${lock_age}s/${COOLDOWN}s), skipping"
+          log "Alert cooldown active ($${lock_age}s/$${COOLDOWN}s), skipping"
           return
         fi
       fi
@@ -563,9 +563,9 @@ resource "aws_instance" "target" {
 
     check_cpu() {
       local cpu_idle=$(top -bn1 | grep 'Cpu(s)' | awk '{print $8}' | cut -d'.' -f1)
-      local cpu_used=$((100 - ${cpu_idle:-100}))
+      local cpu_used=$((100 - $${cpu_idle:-100}))
       if [ "$cpu_used" -ge "$CPU_THRESHOLD" ]; then
-        invoke_lambda 'cpu-spike' "CPU at ${cpu_used}% (threshold: ${CPU_THRESHOLD}%)"
+        invoke_lambda 'cpu-spike' "CPU at $${cpu_used}% (threshold: $${CPU_THRESHOLD}%)"
       fi
     }
 
@@ -575,7 +575,7 @@ resource "aws_instance" "target" {
       local write_kb_after=$(cat /proc/diskstats | awk '{sum+=$10} END{print sum}')
       local write_mb=$(( (write_kb_after - write_kb_before) / 2048 ))
       if [ "$write_mb" -ge "$DISK_WRITE_THRESHOLD_MB" ]; then
-        invoke_lambda 'disk-spike' "Disk write ${write_mb}MB/s (threshold: ${DISK_WRITE_THRESHOLD_MB}MB)"
+        invoke_lambda 'disk-spike' "Disk write $${write_mb}MB/s (threshold: $${DISK_WRITE_THRESHOLD_MB}MB)"
       fi
     }
 
@@ -1942,9 +1942,9 @@ resource "aws_ssm_document" "instance_monitor" {
           "",
           "check_cpu() {",
           "  local cpu_idle=$(top -bn1 | grep 'Cpu(s)' | awk '{print $8}' | cut -d'.' -f1)",
-          "  local cpu_used=$((100 - ${cpu_idle:-100}))",
+          "  local cpu_used=$((100 - $${cpu_idle:-100}))",
           "  if [ \"$cpu_used\" -ge \"$CPU_THRESHOLD\" ]; then",
-          "    invoke_lambda 'cpu-spike' \"CPU at ${cpu_used}% (threshold: ${CPU_THRESHOLD}%)\"",
+          "    invoke_lambda 'cpu-spike' \"CPU at $${cpu_used}% (threshold: $${CPU_THRESHOLD}%)\"",
           "  fi",
           "}",
           "",
@@ -1954,7 +1954,7 @@ resource "aws_ssm_document" "instance_monitor" {
           "  local write_kb_after=$(cat /proc/diskstats | awk '{sum+=$10} END{print sum}')",
           "  local write_mb=$(( (write_kb_after - write_kb_before) / 2048 ))",
           "  if [ \"$write_mb\" -ge \"$DISK_WRITE_THRESHOLD_MB\" ]; then",
-          "    invoke_lambda 'disk-spike' \"Disk write ${write_mb}MB/s (threshold: ${DISK_WRITE_THRESHOLD_MB}MB)\"",
+          "    invoke_lambda 'disk-spike' \"Disk write $${write_mb}MB/s (threshold: $${DISK_WRITE_THRESHOLD_MB}MB)\"",
           "  fi",
           "}",
           "",
@@ -1978,7 +1978,7 @@ resource "aws_ssm_document" "instance_monitor" {
           "}",
           "",
           "# v7 Fix L: inotify-based file change rate monitoring (detects slow encryption)",
-          "FILE_CHANGE_THRESHOLD=${FILE_CHANGE_THRESHOLD:-20}",
+          "FILE_CHANGE_THRESHOLD=$${FILE_CHANGE_THRESHOLD:-20}",
           "FILE_CHANGE_WINDOW=60",
           "FILE_CHANGE_COUNTER=0",
           "FILE_CHANGE_LAST_RESET=$(date +%s)",
@@ -1989,7 +1989,7 @@ resource "aws_ssm_document" "instance_monitor" {
           "  local elapsed=$((now - FILE_CHANGE_LAST_RESET))",
           "  if [ \"$elapsed\" -ge \"$FILE_CHANGE_WINDOW\" ]; then",
           "    if [ \"$FILE_CHANGE_COUNTER\" -ge \"$FILE_CHANGE_THRESHOLD\" ]; then",
-          "      invoke_lambda 'file-change-rate' \"Rapid file modifications: ${FILE_CHANGE_COUNTER} changes in ${elapsed}s (threshold: ${FILE_CHANGE_THRESHOLD}/${FILE_CHANGE_WINDOW}s)\"",
+          "      invoke_lambda 'file-change-rate' \"Rapid file modifications: $${FILE_CHANGE_COUNTER} changes in $${elapsed}s (threshold: $${FILE_CHANGE_THRESHOLD}/$${FILE_CHANGE_WINDOW}s)\"",
           "    fi",
           "    FILE_CHANGE_COUNTER=0",
           "    FILE_CHANGE_LAST_RESET=$now",
@@ -2014,7 +2014,7 @@ resource "aws_ssm_document" "instance_monitor" {
           "    fi",
           "  done",
           "  if [ \"$high_entropy_count\" -ge 3 ]; then",
-          "    invoke_lambda 'entropy-spike' \"High entropy files detected: ${high_entropy_count} files with entropy > 7.9 (likely encrypted)\"",
+          "    invoke_lambda 'entropy-spike' \"High entropy files detected: $${high_entropy_count} files with entropy > 7.9 (likely encrypted)\"",
           "  fi",
           "}",
           "",
@@ -2038,7 +2038,7 @@ resource "aws_ssm_document" "instance_monitor" {
           "    --region \"$REGION\" 2>/dev/null || true",
           "}",
           "",
-          "log \"CloudFreeze v7 systemd monitor started (CPU: ${CPU_THRESHOLD}%, Disk: ${DISK_WRITE_THRESHOLD_MB}MB, Interval: ${CHECK_INTERVAL}s, FileChangeThreshold: ${FILE_CHANGE_THRESHOLD}/min)\"",
+          "log \"CloudFreeze v7 systemd monitor started (CPU: $${CPU_THRESHOLD}%, Disk: $${DISK_WRITE_THRESHOLD_MB}MB, Interval: $${CHECK_INTERVAL}s, FileChangeThreshold: $${FILE_CHANGE_THRESHOLD}/min)\"",
           "send_heartbeat",
           "touch /tmp/cloudfreeze-entropy-marker",
           "",

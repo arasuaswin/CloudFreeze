@@ -1734,7 +1734,7 @@ class TestCheckIAMPermissions:
                 assert result["status"] == "COMPROMISED"
 
     def test_simulation_fails(self):
-        """Lines 360-363: Simulation fails → still healthy."""
+        """Lines 360-363: Simulation fails → degraded."""
         with patch("lambda_watchdog.boto3") as mock_boto:
             mock_sts = MagicMock()
             mock_sts.get_caller_identity.return_value = {
@@ -1745,7 +1745,7 @@ class TestCheckIAMPermissions:
             with patch.object(lw.iam_client, "simulate_principal_policy",
                               side_effect=Exception("No perm")):
                 result = lw.check_iam_permissions()
-                assert result["status"] == "HEALTHY"
+                assert result["status"] == "DEGRADED"
 
     def test_iam_success(self):
         """Line 365: All actions allowed."""
