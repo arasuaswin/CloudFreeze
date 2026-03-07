@@ -1,0 +1,27 @@
+﻿# ══════════════════════════════════════════════════════════════════════════════
+#  CloudFreeze v7 — Example Variable Values
+# ══════════════════════════════════════════════════════════════════════════════
+# Copy this file to terraform.tfvars and customize:
+#   cp terraform.tfvars.example terraform.tfvars
+
+# REQUIRED — Your email for security alerts
+alert_email = "YOUR_EMAIL@example.com"
+
+# AWS region (default: us-east-1)
+# aws_region = "ap-south-1"  # Mumbai for India-based deployments
+
+# KMS rate alarm — tune to your baseline (default: 50 calls/minute)
+# Increase if you have legitimate KMS-heavy workloads
+# kms_call_threshold = 100
+
+# Disk write operations threshold (default: 1000 ops/minute)
+# disk_write_threshold = 2000
+
+# CPU utilization threshold (default: 90%)
+# cpu_threshold = 85
+
+# SSH access — restrict to your IP for production!
+# allowed_ssh_cidr = "YOUR.IP.HERE/32"
+
+# GuardDuty — set to false if already enabled in your account
+# enable_guardduty = true
