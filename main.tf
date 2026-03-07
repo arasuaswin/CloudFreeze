@@ -1328,6 +1328,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "forensic_data" {
   rule {
     id     = "archive-old-forensic-data"
     status = "Enabled"
+    filter {}
     transition {
       days          = 30
       storage_class = "GLACIER"
@@ -1344,6 +1345,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "cloudtrail_logs" {
   rule {
     id     = "archive-old-cloudtrail-logs"
     status = "Enabled"
+    filter {}
     transition {
       days          = 90
       storage_class = "GLACIER"
@@ -1930,7 +1932,7 @@ resource "aws_ssm_document" "instance_monitor" {
           "  if [ -f \"$LOCK_FILE\" ]; then",
           "    local lock_age=$(( $(date +%s) - $(stat -c %Y \"$LOCK_FILE\") ))",
           "    if [ \"$lock_age\" -lt \"$COOLDOWN\" ]; then",
-          "      log \"Alert cooldown active (${lock_age}s/${COOLDOWN}s), skipping\"",
+          "      log \"Alert cooldown active ($${lock_age}s/$${COOLDOWN}s), skipping\"",
           "      return",
           "    fi",
           "  fi",
@@ -2156,7 +2158,7 @@ resource "aws_ssm_association" "instance_monitor" {
   }
 
   # Re-apply when instances change
-  apply_only_at_cron_expression = "cron(0 */4 * * ? *)"  # every 4 hours
+  schedule_expression = "cron(0 */4 * * ? *)"  # every 4 hours
 
   compliance_severity = "CRITICAL"
 }
