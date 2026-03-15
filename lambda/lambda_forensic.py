@@ -1,7 +1,7 @@
 """
 CloudFreeze v7: Forensic Lambda — Async Snapshot + Memory Capture
 ===================================================================
-Authors: Aswin R
+Authors: Aswin R & Vaishnavi SS Nyshadham
 
 v7: Dedicated forensic Lambda invoked ASYNCHRONOUSLY by the kill-switch.
   ✅ Creates encrypted EBS snapshots of every attached volume
