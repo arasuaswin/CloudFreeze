@@ -1,7 +1,7 @@
-﻿"""
+"""
 CloudFreeze v7: Restore Lambda — Un-Quarantine & Rollback
 ===================================================================
-Authors: Aswin R & Vaishnavi SS Nyshadham
+Authors: Aswin R
 
 ZERO-FAILURE EDITION — Edge cases handled:
   ✅ Instance existence check before restore

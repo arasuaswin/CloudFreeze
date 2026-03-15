@@ -1,7 +1,7 @@
-﻿"""
+"""
 CloudFreeze v7: Autonomous Ransomware Defense — Lambda Kill-Switch
 ===================================================================
-Authors: Aswin R & Vaishnavi SS Nyshadham
+Authors: Aswin R
 
 100% REAL-TIME, STATE-OF-ART EDITION — Zero-failure hardened:
   v7 Features:
