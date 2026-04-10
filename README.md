@@ -1,6 +1,6 @@
 # CloudFreeze v7: Autonomous Ransomware Defense for AWS
 
-> **Authors:** Aswin R & Vaishnavi SS Nyshadham
+> **Authors:** Aswin R & Jegan PV
 > **Version:** 7.0 — State-of-the-Art Edition
 > **Runtime:** Python 3.12 | Terraform ≥ 1.3 | AWS Provider ~> 5.0
 > **License:** Proprietary | Academic Research
